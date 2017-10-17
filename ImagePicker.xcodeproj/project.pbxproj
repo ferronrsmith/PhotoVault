@@ -14,6 +14,7 @@
 		6B3D0FB51F92D0F300346E32 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B3D0FB31F92D0F300346E32 /* LaunchScreen.storyboard */; };
 		6B3D0FC01F92D0F300346E32 /* ImagePickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3D0FBF1F92D0F300346E32 /* ImagePickerTests.swift */; };
 		6B3D0FCB1F92D0F300346E32 /* ImagePickerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3D0FCA1F92D0F300346E32 /* ImagePickerUITests.swift */; };
+		6B3D0FD91F9335E600346E32 /* BigImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3D0FD81F9335E600346E32 /* BigImageViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		6B3D0FC61F92D0F300346E32 /* ImagePickerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImagePickerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B3D0FCA1F92D0F300346E32 /* ImagePickerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerUITests.swift; sourceTree = "<group>"; };
 		6B3D0FCC1F92D0F300346E32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6B3D0FD81F9335E600346E32 /* BigImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigImageViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 			children = (
 				6B3D0FAA1F92D0F300346E32 /* AppDelegate.swift */,
 				6B3D0FAC1F92D0F300346E32 /* ViewController.swift */,
+				6B3D0FD81F9335E600346E32 /* BigImageViewController.swift */,
 				6B3D0FAE1F92D0F300346E32 /* Main.storyboard */,
 				6B3D0FB11F92D0F300346E32 /* Assets.xcassets */,
 				6B3D0FB31F92D0F300346E32 /* LaunchScreen.storyboard */,
@@ -260,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B3D0FAD1F92D0F300346E32 /* ViewController.swift in Sources */,
+				6B3D0FD91F9335E600346E32 /* BigImageViewController.swift in Sources */,
 				6B3D0FAB1F92D0F300346E32 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -427,6 +431,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = T8MQVFXG4R;
 				INFOPLIST_FILE = ImagePicker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = hugozhang.ImagePicker;
@@ -441,6 +446,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = T8MQVFXG4R;
 				INFOPLIST_FILE = ImagePicker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = hugozhang.ImagePicker;
