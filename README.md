@@ -2,4 +2,4 @@
 
 Simple, secure photo storing iOS app.
 
-Developed by Hugo Zhang 2017
+##Hugo Zhang 2017
