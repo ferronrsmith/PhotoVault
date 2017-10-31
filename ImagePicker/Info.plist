@@ -23,9 +23,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>&quot;Allow access to camera&quot;</string>
+	<string>"Allow access to camera"</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>"Allow photos to be saved to camera roll"</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>&quot;Require access to function properly&quot;</string>
+	<string>"Require access to function properly"</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -50,7 +52,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>&quot;Allow photos to be saved to camera roll&quot;</string>
 </dict>
 </plist>

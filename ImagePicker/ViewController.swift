@@ -20,7 +20,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     var photoArray = [UIImage]()
     var buttonArray = [Int]()
-    
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
@@ -32,6 +33,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if Constants.officialPhotoArray.count != 0 {
             getStartedLabel.isHidden = true
         }
+        
+        
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         let widthScreen = UIScreen.main.bounds.width
         layout.sectionInset = UIEdgeInsets(top: 2.5, left: 2.5, bottom: 2.5, right: 2.5) //TOP AND BOTTOM ARE ONLY AT THE TOP AND BOTTOM OF CONTAINERRRRRR NOT EACH INDIVIDUAL PHOTO OHHHHHHHHHH
