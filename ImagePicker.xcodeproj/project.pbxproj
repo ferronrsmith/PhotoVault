@@ -17,6 +17,7 @@
 		6B3D0FC01F92D0F300346E32 /* ImagePickerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3D0FBF1F92D0F300346E32 /* ImagePickerTests.swift */; };
 		6B3D0FCB1F92D0F300346E32 /* ImagePickerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3D0FCA1F92D0F300346E32 /* ImagePickerUITests.swift */; };
 		6B3D0FD91F9335E600346E32 /* BigImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3D0FD81F9335E600346E32 /* BigImageViewController.swift */; };
+		6B5C39B61FA95779002BC356 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5C39B51FA95779002BC356 /* LogInViewController.swift */; };
 		6B8451FB1FA91C22009B8DBB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6B8451FA1FA91C22009B8DBB /* GoogleService-Info.plist */; };
 		7D870451CFC4EBFC9B3765BA /* Pods_ImagePickerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CF9033064D081725476854A /* Pods_ImagePickerTests.framework */; };
 /* End PBXBuildFile section */
@@ -56,6 +57,7 @@
 		6B3D0FCA1F92D0F300346E32 /* ImagePickerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerUITests.swift; sourceTree = "<group>"; };
 		6B3D0FCC1F92D0F300346E32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6B3D0FD81F9335E600346E32 /* BigImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigImageViewController.swift; sourceTree = "<group>"; };
+		6B5C39B51FA95779002BC356 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		6B8451FA1FA91C22009B8DBB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7CF9033064D081725476854A /* Pods_ImagePickerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImagePickerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		84F78161197D15FAC968B088 /* Pods_ImagePickerUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImagePickerUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -135,6 +137,7 @@
 				6B3D0FAC1F92D0F300346E32 /* ViewController.swift */,
 				6B3D0FD81F9335E600346E32 /* BigImageViewController.swift */,
 				6B3D0FAE1F92D0F300346E32 /* Main.storyboard */,
+				6B5C39B51FA95779002BC356 /* LogInViewController.swift */,
 				6B3D0FB11F92D0F300346E32 /* Assets.xcassets */,
 				6B3D0FB31F92D0F300346E32 /* LaunchScreen.storyboard */,
 				6B3D0FB61F92D0F300346E32 /* Info.plist */,
@@ -469,6 +472,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B5C39B61FA95779002BC356 /* LogInViewController.swift in Sources */,
 				6B3D0FAD1F92D0F300346E32 /* ViewController.swift in Sources */,
 				6B3D0FD91F9335E600346E32 /* BigImageViewController.swift in Sources */,
 				6B3D0FAB1F92D0F300346E32 /* AppDelegate.swift in Sources */,

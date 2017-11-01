@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 struct Constants {
     static var currentButtonNumber = 0
@@ -20,12 +21,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     var photoArray = [UIImage]()
     var buttonArray = [Int]()
-
-
+    
+    var imageCount = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
+        
+        
+        
+        
         
         //
         //SETS THE SPACING OF 3 CELLS PER ROW SOSO SEXY
@@ -78,11 +84,35 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+        let localPath = info[UIImagePickerControllerImageURL] as! NSURL
         photoArray.append(image)
         Constants.officialPhotoArray = photoArray
         buttonArray.append(photoArray.count)
         picker.dismiss(animated: true, completion: nil)
         collectionView.reloadData()
+        
+        // Get a reference to the storage service using the default Firebase App
+        let storage = Storage.storage()
+        // Create a storage reference from our storage service
+        let storageRef = storage.reference();
+        // Create a child reference
+        // imagesRef now points to "images"
+        let imagesRef = storageRef.child("images_" + UIDevice.current.identifierForVendor!.uuidString);
+        // Create a reference to the file you want to upload
+        let imageRef = imagesRef.child("image" + String(imageCount) + ".png")
+        
+        // Upload the file to the path "images/rivers.jpg"
+        let uploadTask = imageRef.putFile(from: localPath as URL, metadata: nil) { metadata, error in
+            if let error = error {
+                // Uh-oh, an error occurred!
+                print(error)
+            } else {
+                // Metadata contains file metadata such as size, content-type, and download URL.
+                let downloadURL = metadata!.downloadURL()
+                self.imageCount += 1
+            }
+        }
+        
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

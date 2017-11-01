@@ -8,6 +8,7 @@ target 'ImagePicker' do
   # Pods for ImagePicker
   pod 'Firebase/Storage’  
   pod 'Firebase/Core’
+  pod 'Firebase/Auth’
 
   target 'ImagePickerTests' do
     inherit! :search_paths
