@@ -133,7 +133,7 @@
         <!--Navigation Controller-->
         <scene sceneID="GV4-2V-TIB">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="dOF-FW-jvK" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="MainGallery" automaticallyAdjustsScrollViewInsets="NO" id="dOF-FW-jvK" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="yXv-5F-csq">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
@@ -160,7 +160,7 @@
         <!--Log In-->
         <scene sceneID="DWe-zs-OiY">
             <objects>
-                <viewController id="dcc-Nl-Y4b" userLabel="Log In" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="LoginVC" id="dcc-Nl-Y4b" userLabel="Log In" customClass="LogIn" customModule="ImagePicker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="V0k-Jv-gLR">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -171,9 +171,9 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="0.23921568630000001" green="0.35294117650000001" blue="0.62352941179999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="go" textContentType="email"/>
+                                <textInputTraits key="textInputTraits" textContentType="email"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H6E-e1-46L">
+                            <textField opaque="NO" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="H6E-e1-46L">
                                 <rect key="frame" x="43" y="337" width="289" height="45"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -190,7 +190,7 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="dOF-FW-jvK" kind="show" id="Qkx-2A-wan"/>
+                                    <action selector="logIn:" destination="dcc-Nl-Y4b" eventType="touchUpInside" id="8X2-GY-sMd"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vtd-yG-6jK">
@@ -218,6 +218,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <viewLayoutGuide key="safeArea" id="8lh-Md-S4z"/>
                     </view>
+                    <connections>
+                        <outlet property="textFieldLoginEmail" destination="4qG-aB-njg" id="xhH-GI-23h"/>
+                        <outlet property="textFieldLoginPassword" destination="H6E-e1-46L" id="azW-BM-gpF"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XsL-01-DcM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -226,7 +230,7 @@
         <!--Sign Up-->
         <scene sceneID="sFO-0W-wIp">
             <objects>
-                <viewController id="5nw-8u-qxu" userLabel="Sign Up" sceneMemberID="viewController">
+                <viewController id="5nw-8u-qxu" userLabel="Sign Up" customClass="CreateNewAccount" customModule="ImagePicker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="CXy-Td-nzR">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -237,15 +241,15 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="0.23921568630000001" green="0.35294117650000001" blue="0.62352941179999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="go" textContentType="email"/>
+                                <textInputTraits key="textInputTraits" textContentType="email"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vjs-4J-E7Z">
+                            <textField opaque="NO" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Vjs-4J-E7Z">
                                 <rect key="frame" x="43" y="337" width="289" height="45"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="textColor" red="0.23921568630000001" green="0.35294117650000001" blue="0.62352941179999999" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES" textContentType="password"/>
+                                <textInputTraits key="textInputTraits" secureTextEntry="YES" textContentType="password"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FUd-bZ-ZZp">
                                 <rect key="frame" x="196" y="597" width="136" height="50"/>
@@ -255,6 +259,9 @@
                                 <state key="normal" title="Create">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="createAccount:" destination="5nw-8u-qxu" eventType="touchUpInside" id="EvX-DV-GzO"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Create New Account" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="97v-Vg-Can">
                                 <rect key="frame" x="43" y="94" width="289" height="93"/>
@@ -275,14 +282,27 @@
                                     <segue destination="dcc-Nl-Y4b" kind="show" id="zC8-vZ-qw3"/>
                                 </connections>
                             </button>
+                            <textField opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Confirm Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="PKN-ef-0fK">
+                                <rect key="frame" x="43" y="390" width="289" height="45"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="textColor" red="0.23921568630000001" green="0.35294117650000001" blue="0.62352941179999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done" secureTextEntry="YES" textContentType="password"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <viewLayoutGuide key="safeArea" id="2y5-3a-5nl"/>
                     </view>
+                    <connections>
+                        <outlet property="textFieldEmail" destination="Xyp-Zp-L4F" id="CZU-D9-bKL"/>
+                        <outlet property="textFieldPassword1" destination="Vjs-4J-E7Z" id="kY4-Ex-nUo"/>
+                        <outlet property="textFieldPassword2" destination="PKN-ef-0fK" id="qtE-x5-uAl"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DBG-K9-vKQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1159" y="772"/>
+            <point key="canvasLocation" x="-2134" y="43"/>
         </scene>
     </scenes>
 </document>

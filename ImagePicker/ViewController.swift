@@ -24,12 +24,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     var imageCount = 0
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
         
-        
+
         
         
         
@@ -97,11 +98,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let storageRef = storage.reference();
         // Create a child reference
         // imagesRef now points to "images"
-        let imagesRef = storageRef.child("images_" + UIDevice.current.identifierForVendor!.uuidString);
+        let imagesRef = storageRef.child("images_" + (Auth.auth().currentUser?.email)! + "_" + (Auth.auth().currentUser?.uid)!);
         // Create a reference to the file you want to upload
         let imageRef = imagesRef.child("image" + String(imageCount) + ".png")
         
-        // Upload the file to the path "images/rivers.jpg"
+        // Upload the file to the path user folder
         let uploadTask = imageRef.putFile(from: localPath as URL, metadata: nil) { metadata, error in
             if let error = error {
                 // Uh-oh, an error occurred!
@@ -110,6 +111,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 // Metadata contains file metadata such as size, content-type, and download URL.
                 let downloadURL = metadata!.downloadURL()
                 self.imageCount += 1
+                
             }
         }
         
@@ -161,5 +163,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 
 
+}
+
+// Put this piece of code anywhere you like
+extension UIViewController {
+    func hideKeyboardWhenTappedAround() {
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
 }
 
