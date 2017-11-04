@@ -174,7 +174,26 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
-        let localPath = info[UIImagePickerControllerImageURL] as! NSURL
+        var localPath = NSURL()
+        if info[UIImagePickerControllerImageURL] != nil {
+            let localPathTest = info[UIImagePickerControllerImageURL] as! NSURL
+            localPath = localPathTest
+        }
+        else {
+            print("dick")
+            
+            UIImageWriteToSavedPhotosAlbum(image, self, nil, nil)
+            print("1")
+            let imagePickerController = UIImagePickerController()
+            imagePickerController.delegate = self
+            imagePickerController.sourceType = .photoLibrary
+            print("11")
+            picker.dismiss(animated: true, completion: nil)
+            self.present(imagePickerController, animated: true, completion: nil)
+            print("111")
+            return;
+        }
+        
         photoArray.append(image)
         Constants.officialPhotoArray = photoArray
         buttonArray.append(photoArray.count)
