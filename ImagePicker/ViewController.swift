@@ -12,7 +12,8 @@ import Firebase
 struct Constants {
     static var currentButtonNumber = 0
     static var officialPhotoArray = [UIImage]()
-    static var onOpen = true
+    static var currentAlbumTitle = ""
+    
 }
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout  {
@@ -32,38 +33,44 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         collectionView.dataSource = self
         collectionView.delegate = self
         
-        if Constants.onOpen == true {
-            let databaseTemp = Database.database();
-            let databaseTempRef = databaseTemp.reference()
-            
-            databaseTempRef.child("images_" + (Auth.auth().currentUser?.uid)! + "_links").observeSingleEvent(of: .value, with: { (snapshot) in
-                self.imageCount = Int(snapshot.childrenCount)
-                for rest in snapshot.children.allObjects as! [DataSnapshot] {
-                    
-                    let downloadURL = String(describing: rest.value!)
-                    print("ehyoooo " + downloadURL)
-                    let storage = Storage.storage().reference(forURL: downloadURL)
-                    
-                    // Download the data, assuming a max size of 1MB (you can change this as necessary)
-                    storage.getData(maxSize: 10 * 1024 * 1024) { (data, error) -> Void in
-                        // Create a UIImage, add it to the array
-                        if let error = error {
-                            print(error)
-                        } else {
-                            print(self.imageCount)
-                            let loadedImage = UIImage(data: data!)
-                            self.photoArray.append(loadedImage!)
-                            Constants.officialPhotoArray = self.photoArray
-                            self.buttonArray.append(self.photoArray.count)
-                            self.collectionView.reloadData()                        
-                        }
-                        
-                    }
-                }
-            })
-            Constants.onOpen = false
-        }
         
+        let databaseTemp = Database.database();
+        let databaseTempRef = databaseTemp.reference()
+        
+        databaseTempRef.child("images_" + (Auth.auth().currentUser?.uid)! + "_links/" + Constants.currentAlbumTitle + "_links").observeSingleEvent(of: .value, with: { (snapshot) in
+            self.imageCount = Int(snapshot.childrenCount)
+            for rest in snapshot.children.allObjects as! [DataSnapshot] {
+                
+                let downloadURL = String(describing: rest.value!)
+                //print("ehyoooo " + downloadURL)
+                let storage = Storage.storage().reference(forURL: downloadURL)
+                
+                // Download the data, assuming a max size of 1MB (you can change this as necessary)
+                storage.getData(maxSize: 10 * 1024 * 1024) { (data, error) -> Void in
+                    // Create a UIImage, add it to the array
+                    if let error = error {
+                        print(error)
+                    } else {
+                        //print(self.imageCount)
+                        let loadedImage = UIImage(data: data!)
+                        self.photoArray.append(loadedImage!)
+                        Constants.officialPhotoArray = self.photoArray
+                        self.buttonArray.append(self.photoArray.count)
+                        self.collectionView.reloadData()
+                        //print(self.photoArray)
+
+                    }
+                    
+                }
+            }
+        })
+        
+        
+        //Update collection view after deleting photo
+        
+        //self.collectionView.reloadData()
+        
+
         
 //        let linksTempRef = databaseTempRef.child("images_" + (Auth.auth().currentUser?.uid)! + "_links")
 //        let currentImageCountTempRef = linksTempRef.child("currentImageCount")
@@ -179,9 +186,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             let localPathTest = info[UIImagePickerControllerImageURL] as! NSURL
             localPath = localPathTest
         }
-        else {
-            print("dick")
-            
+        else {            
             UIImageWriteToSavedPhotosAlbum(image, self, nil, nil)
             print("1")
             let imagePickerController = UIImagePickerController()
@@ -208,13 +213,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         // Create a child reference
         // imagesRef now points to "images"
         let imagesRef = storageRef.child("images_" + (Auth.auth().currentUser?.email)! + "_" + (Auth.auth().currentUser?.uid)!);
+        let albumFolder = imagesRef.child(Constants.currentAlbumTitle)
         let linksRef = databaseRef.child("images_" + (Auth.auth().currentUser?.uid)! + "_links")
         
         // Create a reference to the file you want to upload
-        let imageRef = imagesRef.child("image" + String(imageCount) + ".png")
+        let imageRef = albumFolder.child("image" + String(imageCount) + ".png")
         
         // Upload the file to the path user folder
-        let uploadTask = imageRef.putFile(from: localPath as URL, metadata: nil) { metadata, error in
+        _ = imageRef.putFile(from: localPath as URL, metadata: nil) { metadata, error in
             if let error = error {
                 // Uh-oh, an error occurred!
                 print(error)
@@ -222,9 +228,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 print("ey")
                 // Metadata contains file metadata such as size, content-type, and download URL.
                 let downloadURL = metadata!.downloadURL()?.absoluteString
-                let linkRef = linksRef.child("image" + String(self.imageCount) + "_link")
+                let albumLinksFolder = linksRef.child(Constants.currentAlbumTitle + "_links")
+                let linkRef = albumLinksFolder.child("image" + String(self.imageCount) + "_link")
                 self.imageCount += 1
                 linkRef.setValue(downloadURL)
+                print("yeyos")
             }
         }
         picker.dismiss(animated: true, completion: nil)

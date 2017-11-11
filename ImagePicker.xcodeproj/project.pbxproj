@@ -19,6 +19,7 @@
 		6B3D0FD91F9335E600346E32 /* BigImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3D0FD81F9335E600346E32 /* BigImageViewController.swift */; };
 		6B5C39B61FA95779002BC356 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5C39B51FA95779002BC356 /* LogInViewController.swift */; };
 		6B8451FB1FA91C22009B8DBB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6B8451FA1FA91C22009B8DBB /* GoogleService-Info.plist */; };
+		6BD599281FB652F700F706FD /* AlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD599271FB652F700F706FD /* AlbumViewController.swift */; };
 		6BE32C781FABCA48004518BF /* CreateNewAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE32C771FABCA48004518BF /* CreateNewAccount.swift */; };
 		7D870451CFC4EBFC9B3765BA /* Pods_ImagePickerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CF9033064D081725476854A /* Pods_ImagePickerTests.framework */; };
 /* End PBXBuildFile section */
@@ -60,6 +61,7 @@
 		6B3D0FD81F9335E600346E32 /* BigImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigImageViewController.swift; sourceTree = "<group>"; };
 		6B5C39B51FA95779002BC356 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		6B8451FA1FA91C22009B8DBB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6BD599271FB652F700F706FD /* AlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumViewController.swift; sourceTree = "<group>"; };
 		6BE32C771FABCA48004518BF /* CreateNewAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewAccount.swift; sourceTree = "<group>"; };
 		7CF9033064D081725476854A /* Pods_ImagePickerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImagePickerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		84F78161197D15FAC968B088 /* Pods_ImagePickerUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImagePickerUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,6 +139,7 @@
 			children = (
 				6B3D0FAA1F92D0F300346E32 /* AppDelegate.swift */,
 				6B3D0FAC1F92D0F300346E32 /* ViewController.swift */,
+				6BD599271FB652F700F706FD /* AlbumViewController.swift */,
 				6B3D0FD81F9335E600346E32 /* BigImageViewController.swift */,
 				6B3D0FAE1F92D0F300346E32 /* Main.storyboard */,
 				6BE32C771FABCA48004518BF /* CreateNewAccount.swift */,
@@ -477,6 +480,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BD599281FB652F700F706FD /* AlbumViewController.swift in Sources */,
 				6BE32C781FABCA48004518BF /* CreateNewAccount.swift in Sources */,
 				6B5C39B61FA95779002BC356 /* LogInViewController.swift in Sources */,
 				6B3D0FAD1F92D0F300346E32 /* ViewController.swift in Sources */,

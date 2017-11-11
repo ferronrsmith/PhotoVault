@@ -36,7 +36,7 @@ class BigImageViewController : UIViewController, UINavigationControllerDelegate 
     }
     
     @IBAction func clickedShare(_ sender: Any) {
-        let shareSheet = UIAlertController(title: "Export", message: nil, preferredStyle: .actionSheet)
+        let shareSheet = UIAlertController(title: "Options", message: nil, preferredStyle: .actionSheet)
         
         shareSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { (action: UIAlertAction) in
             UIImageWriteToSavedPhotosAlbum(Constants.officialPhotoArray[Constants.currentButtonNumber-1], nil, nil, nil)
@@ -44,7 +44,12 @@ class BigImageViewController : UIViewController, UINavigationControllerDelegate 
             
         }))
         
-        shareSheet.addAction(UIAlertAction(title: "iCloud", style: .default, handler: { (action: UIAlertAction) in
+        shareSheet.addAction(UIAlertAction(title: "Delete", style: .default, handler: { (action: UIAlertAction) in
+            
+            //if let index = Constants.officialPhotoArray.index(of:Constants.officialPhotoArray[Constants.currentButtonNumber-1]) {
+            //    Constants.officialPhotoArray.remove(at: index)
+            //}
+            
             
         }))
         
