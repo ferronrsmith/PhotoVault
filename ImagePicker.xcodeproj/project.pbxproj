@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0263DFE2B7F96638A0A82FB3 /* Pods_ImagePickerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84F78161197D15FAC968B088 /* Pods_ImagePickerUITests.framework */; };
 		5A4391579FFBF5FF31CAC046 /* Pods_ImagePicker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 60914077B38E436729F7E455 /* Pods_ImagePicker.framework */; };
+		6B18A2AB1FB79CDA00E6A759 /* default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6B18A2AA1FB79CDA00E6A759 /* default.png */; };
 		6B3D0FAB1F92D0F300346E32 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3D0FAA1F92D0F300346E32 /* AppDelegate.swift */; };
 		6B3D0FAD1F92D0F300346E32 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3D0FAC1F92D0F300346E32 /* ViewController.swift */; };
 		6B3D0FB01F92D0F300346E32 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B3D0FAE1F92D0F300346E32 /* Main.storyboard */; };
@@ -45,6 +46,7 @@
 		098BAB6037E1DF5DBADEAEAF /* Pods-ImagePickerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImagePickerUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImagePickerUITests/Pods-ImagePickerUITests.release.xcconfig"; sourceTree = "<group>"; };
 		1A6639B6D2233297F554EC7C /* Pods-ImagePickerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ImagePickerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ImagePickerTests/Pods-ImagePickerTests.release.xcconfig"; sourceTree = "<group>"; };
 		60914077B38E436729F7E455 /* Pods_ImagePicker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImagePicker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B18A2AA1FB79CDA00E6A759 /* default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default.png; sourceTree = "<group>"; };
 		6B3D0FA71F92D0F300346E32 /* ImagePicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImagePicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B3D0FAA1F92D0F300346E32 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6B3D0FAC1F92D0F300346E32 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				6B3D0FAE1F92D0F300346E32 /* Main.storyboard */,
 				6BE32C771FABCA48004518BF /* CreateNewAccount.swift */,
 				6B5C39B51FA95779002BC356 /* LogInViewController.swift */,
+				6B18A2AA1FB79CDA00E6A759 /* default.png */,
 				6B3D0FB11F92D0F300346E32 /* Assets.xcassets */,
 				6B3D0FB31F92D0F300346E32 /* LaunchScreen.storyboard */,
 				6B3D0FB61F92D0F300346E32 /* Info.plist */,
@@ -300,6 +303,7 @@
 				6B8451FB1FA91C22009B8DBB /* GoogleService-Info.plist in Resources */,
 				6B3D0FB21F92D0F300346E32 /* Assets.xcassets in Resources */,
 				6B3D0FB01F92D0F300346E32 /* Main.storyboard in Resources */,
+				6B18A2AB1FB79CDA00E6A759 /* default.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

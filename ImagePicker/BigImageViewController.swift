@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import Firebase
 
 class BigImageViewController : UIViewController, UINavigationControllerDelegate {
     
     @IBOutlet weak var bigImage: UIImageView!
+    var imageLink = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,7 +20,7 @@ class BigImageViewController : UIViewController, UINavigationControllerDelegate 
         navigationController?.hidesBarsOnTap = true
         
         bigImage.image = Constants.officialPhotoArray[Constants.currentButtonNumber - 1]
-        
+        imageLink = Constants.officialLinksArray[Constants.currentButtonNumber - 1]
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -42,6 +44,15 @@ class BigImageViewController : UIViewController, UINavigationControllerDelegate 
             UIImageWriteToSavedPhotosAlbum(Constants.officialPhotoArray[Constants.currentButtonNumber-1], nil, nil, nil)
             
             
+        }))
+        
+        shareSheet.addAction(UIAlertAction(title: "Set as Album Cover", style: .default, handler: { (action: UIAlertAction) in
+            let databaseTemp = Database.database();
+            let databaseTempRef = databaseTemp.reference()
+            let linksRef = databaseTempRef.child("images_" + (Auth.auth().currentUser?.uid)! + "_links/CoverPhotos")
+            let coverPhoto = linksRef.child(Constants.currentAlbumTitle)
+            coverPhoto.setValue(self.imageLink)
+            Constants.needsToReload = true
         }))
         
         shareSheet.addAction(UIAlertAction(title: "Delete", style: .default, handler: { (action: UIAlertAction) in

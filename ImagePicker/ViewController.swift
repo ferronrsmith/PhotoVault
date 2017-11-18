@@ -12,7 +12,9 @@ import Firebase
 struct Constants {
     static var currentButtonNumber = 0
     static var officialPhotoArray = [UIImage]()
+    static var officialLinksArray = [String]()
     static var currentAlbumTitle = ""
+    static var needsToReload = false
     
 }
 
@@ -22,10 +24,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet weak var getStartedLabel: UILabel!
     
     var photoArray = [UIImage]()
+    var linksArray = [String]()
     var buttonArray = [Int]()
     
     var imageCount = 0
-    
+    var pickers = UIImagePickerController()
 
     
     override func viewDidLoad() {
@@ -33,6 +36,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         collectionView.dataSource = self
         collectionView.delegate = self
         
+        self.title = Constants.currentAlbumTitle
         
         let databaseTemp = Database.database();
         let databaseTempRef = databaseTemp.reference()
@@ -43,6 +47,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 
                 let downloadURL = String(describing: rest.value!)
                 //print("ehyoooo " + downloadURL)
+                self.linksArray.append(downloadURL)
+                Constants.officialLinksArray = self.linksArray
                 let storage = Storage.storage().reference(forURL: downloadURL)
                 
                 // Download the data, assuming a max size of 1MB (you can change this as necessary)
@@ -65,6 +71,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
         })
         
+
         
         //Update collection view after deleting photo
         
@@ -179,9 +186,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.present(actionSheet, animated: true, completion: nil)
     }
     
+    
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
         var localPath = NSURL()
+        pickers = picker
         if info[UIImagePickerControllerImageURL] != nil {
             let localPathTest = info[UIImagePickerControllerImageURL] as! NSURL
             localPath = localPathTest
@@ -202,7 +212,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         photoArray.append(image)
         Constants.officialPhotoArray = photoArray
         buttonArray.append(photoArray.count)
-        collectionView.reloadData()
         
         // Get a reference to the storage service using the default Firebase App
         let storage = Storage.storage()
@@ -232,10 +241,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 let linkRef = albumLinksFolder.child("image" + String(self.imageCount) + "_link")
                 self.imageCount += 1
                 linkRef.setValue(downloadURL)
+                self.linksArray.append(downloadURL!)
+                Constants.officialLinksArray = self.linksArray
                 print("yeyos")
+                print("please end me");
+                self.collectionView.reloadData();
+                self.pickers.dismiss(animated: true, completion: nil)
             }
         }
-        picker.dismiss(animated: true, completion: nil)
+        
+        
 
     }
     

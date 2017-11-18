@@ -21,6 +21,8 @@ class LogIn : UIViewController, UITextFieldDelegate, UINavigationControllerDeleg
         textFieldLoginEmail.delegate = self
         textFieldLoginPassword.delegate = self
         
+        print("cocls")
+        
     }
     
     @IBAction func logIn(_ sender: Any) {
