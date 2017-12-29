@@ -30,6 +30,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var imageCount = 0
     var pickers = UIImagePickerController()
 
+    let dispatchQueue = DispatchQueue(label: "FIREBASE_GETDATA")
+    let dispatchGroup  = DispatchGroup()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,39 +39,38 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         collectionView.delegate = self
         
         self.title = Constants.currentAlbumTitle
-        
-        let databaseTemp = Database.database();
-        let databaseTempRef = databaseTemp.reference()
-        
-        databaseTempRef.child("images_" + (Auth.auth().currentUser?.uid)! + "_links/" + Constants.currentAlbumTitle + "_links").observeSingleEvent(of: .value, with: { (snapshot) in
-            self.imageCount = Int(snapshot.childrenCount)
-            for rest in snapshot.children.allObjects as! [DataSnapshot] {
-                
-                let downloadURL = String(describing: rest.value!)
-                //print("ehyoooo " + downloadURL)
-                self.linksArray.append(downloadURL)
-                Constants.officialLinksArray = self.linksArray
-                let storage = Storage.storage().reference(forURL: downloadURL)
-                
-                // Download the data, assuming a max size of 1MB (you can change this as necessary)
-                storage.getData(maxSize: 10 * 1024 * 1024) { (data, error) -> Void in
-                    // Create a UIImage, add it to the array
-                    if let error = error {
-                        print(error)
-                    } else {
-                        //print(self.imageCount)
-                        let loadedImage = UIImage(data: data!)
-                        self.photoArray.append(loadedImage!)
-                        Constants.officialPhotoArray = self.photoArray
-                        self.buttonArray.append(self.photoArray.count)
-                        self.collectionView.reloadData()
-                        //print(self.photoArray)
-
-                    }
-                    
-                }
-            }
-        })
+//        let databaseTemp = Database.database();
+//        let databaseTempRef = databaseTemp.reference()
+//
+//        databaseTempRef.child("images_" + (Auth.auth().currentUser?.uid)! + "_links/" + Constants.currentAlbumTitle + "_links").observeSingleEvent(of: .value, with: { (snapshot) in
+//            self.imageCount = Int(snapshot.childrenCount)
+//            for rest in snapshot.children.allObjects as! [DataSnapshot] {
+//
+//                let downloadURL = String(describing: rest.value!)
+//                //print("ehyoooo " + downloadURL)
+//                self.linksArray.append(downloadURL)
+//                Constants.officialLinksArray = self.linksArray
+//                let storage = Storage.storage().reference(forURL: downloadURL)
+//
+//                // Download the data, assuming a max size of 1MB (you can change this as necessary)
+//                storage.getData(maxSize: 10 * 1024 * 1024) { (data, error) -> Void in
+//                    // Create a UIImage, add it to the array
+//                    if let error = error {
+//                        print(error)
+//                    } else {
+//                        //print(self.imageCount)
+//                        let loadedImage = UIImage(data: data!)
+//                        self.photoArray.append(loadedImage!)
+//                        Constants.officialPhotoArray = self.photoArray
+//                        self.buttonArray.append(self.photoArray.count)
+//                        self.collectionView.reloadData()
+//                        //print(self.photoArray)
+//
+//                    }
+//
+//                }
+//            }
+//        })
         
 
         
@@ -155,9 +156,57 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         // Do any additional setup after loading the view, typically from a nib.
         
         navigationController?.hidesBarsOnTap = false
+        
+        loadCellsInOrder() {
+            print("dickkkkkkkkkkkkkkkkkkkkkkkk")
+    
+            for link in Constants.officialLinksArray {
+                let storage = Storage.storage().reference(forURL: link)
+                // Download the data, assuming a max size of 1MB (you can change this as necessary)
+                self.dispatchQueue.async {
+                    self.dispatchGroup.enter()
+                    storage.getData(maxSize: 10 * 1024 * 1024) { (data, error) -> Void in
+                        // Create a UIImage, add it to the array
+                        if let error = error {
+                            print(error)
+                        } else {
+                            //print(self.imageCount)
+                            let loadedImage = UIImage(data: data!)
+                            self.photoArray.append(loadedImage!)
+                            Constants.officialPhotoArray = self.photoArray
+                            self.buttonArray.append(self.photoArray.count)
+                            self.collectionView.reloadData()
+                            //print(self.photoArray)
+                        }
+                        self.dispatchGroup.leave()
+                    }
+                    _ = self.dispatchGroup.wait(timeout: .distantFuture)
+                }
+            }
+        }
     }
     
+    func loadCellsInOrder(completion: @escaping () -> ()) {
+        
+        let databaseTemp = Database.database();
+        let databaseTempRef = databaseTemp.reference()
+        
+        print("kill me now " + Constants.currentAlbumTitle)
+        print("ooogaloooooooo " + String(describing: Constants.officialLinksArray))
+        print("smoooglooooooo " + String(describing: Constants.officialPhotoArray))
 
+        databaseTempRef.child("images_" + (Auth.auth().currentUser?.uid)! + "_links/" + Constants.currentAlbumTitle + "_links").observeSingleEvent(of: .value, with: { (snapshot) in
+            self.imageCount = Int(snapshot.childrenCount)
+            for rest in snapshot.children.allObjects as! [DataSnapshot] {
+                let downloadURL = String(describing: rest.value!)
+                //print("ehyoooo " + downloadURL)
+                self.linksArray.append(downloadURL)
+                Constants.officialLinksArray = self.linksArray
+                
+            }
+            completion()
+        })
+    }
     
     @IBAction func chooseImage(_ sender: Any) {
         let imagePickerController = UIImagePickerController()
@@ -226,8 +275,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let linksRef = databaseRef.child("images_" + (Auth.auth().currentUser?.uid)! + "_links")
         
         // Create a reference to the file you want to upload
-        let imageRef = albumFolder.child("image" + String(imageCount) + ".png")
-        
+        var imageRef = Storage.storage().reference()
+        if self.imageCount <= 9 {
+            imageRef = albumFolder.child("image0" + String(imageCount) + ".png")
+            
+        } else if self.imageCount > 9 {
+            
+            imageRef = albumFolder.child("image" + String(imageCount) + ".png")
+            
+        }
         // Upload the file to the path user folder
         _ = imageRef.putFile(from: localPath as URL, metadata: nil) { metadata, error in
             if let error = error {
@@ -238,7 +294,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 // Metadata contains file metadata such as size, content-type, and download URL.
                 let downloadURL = metadata!.downloadURL()?.absoluteString
                 let albumLinksFolder = linksRef.child(Constants.currentAlbumTitle + "_links")
-                let linkRef = albumLinksFolder.child("image" + String(self.imageCount) + "_link")
+                var linkRef = Database.database().reference();
+                
+                if self.imageCount <= 9 {
+                    
+                    linkRef = albumLinksFolder.child("image0" + String(self.imageCount) + "_link")
+                    
+                } else if self.imageCount > 9 {
+                    
+                    linkRef = albumLinksFolder.child("image" + String(self.imageCount) + "_link")
+                    
+                }
+                
                 self.imageCount += 1
                 linkRef.setValue(downloadURL)
                 self.linksArray.append(downloadURL!)

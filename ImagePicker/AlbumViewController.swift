@@ -239,6 +239,8 @@ class AlbumViewController : UIViewController, UINavigationControllerDelegate, UI
         let cellLabel = cell?.viewWithTag(2) as! UILabel
         
         print(cellLabel.text!)
+        Constants.officialPhotoArray = []
+        Constants.officialLinksArray = []
         Constants.currentAlbumTitle = cellLabel.text!
 
     }
