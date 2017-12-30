@@ -6,6 +6,7 @@ target 'ImagePicker' do
   use_frameworks!
 
   # Pods for ImagePicker
+  pod 'KVLoading', '~> 1.6'
   pod 'Firebase/Storage’  
   pod 'Firebase/Core’
   pod 'Firebase/Auth’

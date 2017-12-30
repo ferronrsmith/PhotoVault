@@ -18,6 +18,11 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>KVLoading.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>7</integer>
+		</dict>
 		<key>Pods-ImagePicker.xcscheme</key>
 		<dict>
 			<key>isShown</key>

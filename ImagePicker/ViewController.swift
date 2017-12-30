@@ -32,7 +32,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     let dispatchQueue = DispatchQueue(label: "FIREBASE_GETDATA")
     let dispatchGroup  = DispatchGroup()
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
@@ -157,6 +157,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         navigationController?.hidesBarsOnTap = false
         
+//        let alert = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
+//
+//        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 10, y: 5, width: 50, height: 50))
+//        loadingIndicator.hidesWhenStopped = true
+//        loadingIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+//        loadingIndicator.startAnimating();
+//
+//        alert.view.addSubview(loadingIndicator)
+//        self.present(alert, animated: true, completion: nil)
+        
         loadCellsInOrder() {
             print("dickkkkkkkkkkkkkkkkkkkkkkkk")
     
@@ -183,9 +193,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     _ = self.dispatchGroup.wait(timeout: .distantFuture)
                 }
             }
+            print("done done done")
+//            alert.removeFromParentViewController()
         }
+        
+
+
     }
-    
+
     func loadCellsInOrder(completion: @escaping () -> ()) {
         
         let databaseTemp = Database.database();

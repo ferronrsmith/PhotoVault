@@ -20,6 +20,9 @@
 		6B3D0FD91F9335E600346E32 /* BigImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3D0FD81F9335E600346E32 /* BigImageViewController.swift */; };
 		6B5C39B61FA95779002BC356 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B5C39B51FA95779002BC356 /* LogInViewController.swift */; };
 		6B8451FB1FA91C22009B8DBB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6B8451FA1FA91C22009B8DBB /* GoogleService-Info.plist */; };
+		6BBBFD6A1FF74FA2000548EB /* Title.png in Resources */ = {isa = PBXBuildFile; fileRef = 6BBBFD691FF74F9F000548EB /* Title.png */; };
+		6BBBFD6C1FF7635C000548EB /* Button.png in Resources */ = {isa = PBXBuildFile; fileRef = 6BBBFD6B1FF7635B000548EB /* Button.png */; };
+		6BBBFD6E1FF77007000548EB /* customTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBBFD6D1FF77007000548EB /* customTextField.swift */; };
 		6BD599281FB652F700F706FD /* AlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD599271FB652F700F706FD /* AlbumViewController.swift */; };
 		6BE32C781FABCA48004518BF /* CreateNewAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BE32C771FABCA48004518BF /* CreateNewAccount.swift */; };
 		7D870451CFC4EBFC9B3765BA /* Pods_ImagePickerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CF9033064D081725476854A /* Pods_ImagePickerTests.framework */; };
@@ -63,6 +66,9 @@
 		6B3D0FD81F9335E600346E32 /* BigImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BigImageViewController.swift; sourceTree = "<group>"; };
 		6B5C39B51FA95779002BC356 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		6B8451FA1FA91C22009B8DBB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6BBBFD691FF74F9F000548EB /* Title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Title.png; sourceTree = "<group>"; };
+		6BBBFD6B1FF7635B000548EB /* Button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Button.png; sourceTree = "<group>"; };
+		6BBBFD6D1FF77007000548EB /* customTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = customTextField.swift; sourceTree = "<group>"; };
 		6BD599271FB652F700F706FD /* AlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumViewController.swift; sourceTree = "<group>"; };
 		6BE32C771FABCA48004518BF /* CreateNewAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewAccount.swift; sourceTree = "<group>"; };
 		7CF9033064D081725476854A /* Pods_ImagePickerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ImagePickerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -144,7 +150,10 @@
 				6BD599271FB652F700F706FD /* AlbumViewController.swift */,
 				6B3D0FD81F9335E600346E32 /* BigImageViewController.swift */,
 				6B3D0FAE1F92D0F300346E32 /* Main.storyboard */,
+				6BBBFD6D1FF77007000548EB /* customTextField.swift */,
+				6BBBFD6B1FF7635B000548EB /* Button.png */,
 				6BE32C771FABCA48004518BF /* CreateNewAccount.swift */,
+				6BBBFD691FF74F9F000548EB /* Title.png */,
 				6B5C39B51FA95779002BC356 /* LogInViewController.swift */,
 				6B18A2AA1FB79CDA00E6A759 /* default.png */,
 				6B3D0FB11F92D0F300346E32 /* Assets.xcassets */,
@@ -300,10 +309,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B3D0FB51F92D0F300346E32 /* LaunchScreen.storyboard in Resources */,
+				6BBBFD6C1FF7635C000548EB /* Button.png in Resources */,
 				6B8451FB1FA91C22009B8DBB /* GoogleService-Info.plist in Resources */,
 				6B3D0FB21F92D0F300346E32 /* Assets.xcassets in Resources */,
 				6B3D0FB01F92D0F300346E32 /* Main.storyboard in Resources */,
 				6B18A2AB1FB79CDA00E6A759 /* default.png in Resources */,
+				6BBBFD6A1FF74FA2000548EB /* Title.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -485,6 +496,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6BD599281FB652F700F706FD /* AlbumViewController.swift in Sources */,
+				6BBBFD6E1FF77007000548EB /* customTextField.swift in Sources */,
 				6BE32C781FABCA48004518BF /* CreateNewAccount.swift in Sources */,
 				6B5C39B61FA95779002BC356 /* LogInViewController.swift in Sources */,
 				6B3D0FAD1F92D0F300346E32 /* ViewController.swift in Sources */,
