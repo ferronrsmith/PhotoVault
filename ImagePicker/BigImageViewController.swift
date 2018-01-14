@@ -55,14 +55,6 @@ class BigImageViewController : UIViewController, UINavigationControllerDelegate 
             Constants.needsToReload = true
         }))
         
-        shareSheet.addAction(UIAlertAction(title: "Delete", style: .default, handler: { (action: UIAlertAction) in
-            
-            //if let index = Constants.officialPhotoArray.index(of:Constants.officialPhotoArray[Constants.currentButtonNumber-1]) {
-            //    Constants.officialPhotoArray.remove(at: index)
-            //}
-            
-            
-        }))
         
         shareSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         

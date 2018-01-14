@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import StoreKit
 
 struct Constants {
     static var currentButtonNumber = 0
@@ -16,9 +17,13 @@ struct Constants {
     static var currentAlbumTitle = ""
     static var needsToReload = false
     
+    static var currentPlan = ""
+    
 }
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout  {
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SKProductsRequestDelegate, SKPaymentTransactionObserver {
+
+    
 
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var getStartedLabel: UILabel!
@@ -32,13 +37,24 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     let dispatchQueue = DispatchQueue(label: "FIREBASE_GETDATA")
     let dispatchGroup  = DispatchGroup()
-        
+    
+    let PREMIUM_PRODUCT_ID   = "com.photolockr.premium"
+    let UNLIMITED_PRODUCT_ID = "com.photolockr.unlimited"
+    
+    var productID = ""
+    var productsRequest = SKProductsRequest()
+    var iapProducts = [SKProduct]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
         
         self.title = Constants.currentAlbumTitle
+        
+        // Fetch IAP Products available
+        fetchAvailableProducts()
+        
 //        let databaseTemp = Database.database();
 //        let databaseTempRef = databaseTemp.reference()
 //
@@ -197,8 +213,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 //            alert.removeFromParentViewController()
         }
         
-
-
     }
 
     func loadCellsInOrder(completion: @escaping () -> ()) {
@@ -224,6 +238,31 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     
     @IBAction func chooseImage(_ sender: Any) {
+        if Constants.currentPlan == "free" {
+            if photoArray.count >= 10 {
+                // Need to upgrade plan for premium or unlimited data
+                IAPBothOptions()
+            }
+            else {
+                imageChooser()
+            }
+        }
+        else if Constants.currentPlan == "premium" {
+            if photoArray.count >= 25 {
+                // Need to upgrade plan for unlimited data
+                IAPUnlimitedOptionOnly()
+            }
+            else {
+                imageChooser()
+            }
+        }
+        else if Constants.currentPlan == "unlimited" {
+            imageChooser()
+        }
+        
+    }
+    
+    func imageChooser() {
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
         
@@ -250,7 +289,35 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.present(actionSheet, animated: true, completion: nil)
     }
     
+    func IAPBothOptions() {
+        let alert = UIAlertController(title: "Upgrade Plan Required", message: "You've run out of storage in this album! To continue adding photos to this album, please choose a plan upgrade. Premium offers a total of 3 albums and 25 photos per album. Unlimited offers unlimited albums and photos.", preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "$0.99 Premium Plan", style: .default, handler: { (action) in
+            self.purchaseMyProduct(product: self.iapProducts[0])
+        }))
+        
+        alert.addAction(UIAlertAction(title: "$1.99 Unlimited Plan", style: .default, handler: { (action) in
+            self.purchaseMyProduct(product: self.iapProducts[1])
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Keep Using Free Plan", style: .destructive, handler: { (action) -> Void in }))
+        
+        self.present(alert, animated: true, completion: nil)
+        
+    }
     
+    func IAPUnlimitedOptionOnly() {
+        let alert = UIAlertController(title: "Upgrade Plan Required", message: "You've run out of storage in this album! To continue adding photos to this album, please choose a plan upgrade or switch albums. Unlimited offers unlimited albums and photos.", preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "$1.99 Unlimited Plan", style: .default, handler: { (action) in
+            self.purchaseMyProduct(product: self.iapProducts[1])
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Keep Using Premium Plan", style: .destructive, handler: { (action) -> Void in }))
+        
+        self.present(alert, animated: true, completion: nil)
+        
+    }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
@@ -381,7 +448,108 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         // Dispose of any resources that can be recreated.
     }
 
+    // MARK: - FETCH AVAILABLE IAP PRODUCTS
+    func fetchAvailableProducts()  {
+        
+        // Put here your IAP Products ID's
+        var productIdentifiers = Set<String>()
+        productIdentifiers.insert(PREMIUM_PRODUCT_ID)
+        productIdentifiers.insert(UNLIMITED_PRODUCT_ID)
+        
+        productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers)
+        productsRequest.delegate = self
+        productsRequest.start()
+    }
+    
+    // MARK: - REQUEST IAP PRODUCTS
+    func productsRequest (_ request:SKProductsRequest, didReceive response:SKProductsResponse) {
+        if (response.products.count > 0) {
+            iapProducts = response.products
 
+            print(iapProducts)
+            
+            for p in iapProducts {
+                print("Found product: \(p.productIdentifier) \(p.localizedTitle) \(p.price.floatValue)")
+            }
+            
+        }
+    }
+    
+    // MARK: - MAKE PURCHASE OF A PRODUCT
+    func canMakePurchases() -> Bool {  return SKPaymentQueue.canMakePayments()  }
+    func purchaseMyProduct(product: SKProduct) {
+        if self.canMakePurchases() {
+            let payment = SKPayment(product: product)
+            SKPaymentQueue.default().add(self)
+            SKPaymentQueue.default().add(payment)
+            
+            print("PRODUCT TO PURCHASE: \(product.productIdentifier)")
+            productID = product.productIdentifier
+            
+            
+            // IAP Purchases dsabled on the Device
+        } else {
+           
+            let alert = UIAlertController(title: "Purchases Disabled", message: "Purchases are disabled on your device. Please enable in-app purchases and retry.", preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "OK", style: .destructive, handler: { (action) -> Void in })
+            alert.addAction(cancel)
+            present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    // MARK:- IAP PAYMENT QUEUE
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        for transaction:AnyObject in transactions {
+            if let trans = transaction as? SKPaymentTransaction {
+                switch trans.transactionState {
+                    
+                case .purchased:
+                    SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
+                    
+                    // The Consumable product (10 coins) has been purchased -> gain 10 extra coins!
+                    if productID == PREMIUM_PRODUCT_ID {
+                        
+                        let userID = Auth.auth().currentUser?.uid
+                        var ref: DatabaseReference!
+                        ref = Database.database().reference()
+                        ref.child("users/" + userID! + "/plan").setValue("premium")
+                        
+                        UserDefaults.standard.set("premium", forKey: "plan") //setObject
+                        Constants.currentPlan = "premium"
+                        
+                        let alert = UIAlertController(title: "Purchase Successful", message: "You've successfully unlocked the Premium version! You now have access to 3 total albums and 25 photos per album. Thank you for supporting the developer.", preferredStyle: .alert)
+                        let cancel = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in })
+                        alert.addAction(cancel)
+                        present(alert, animated: true, completion: nil)
+                        
+                        // The Non-Consumable product (Premium) has been purchased!
+                    } else if productID == UNLIMITED_PRODUCT_ID {
+                        
+                        let userID = Auth.auth().currentUser?.uid
+                        var ref: DatabaseReference!
+                        ref = Database.database().reference()
+                        ref.child("users/" + userID! + "/plan").setValue("unlimited")
+                        
+                        UserDefaults.standard.set("unlimited", forKey: "plan") //setObject
+                        Constants.currentPlan = "unlimited"
+                        
+                        let alert = UIAlertController(title: "Purchase Successful", message: "You've successfully unlocked the Unlimited version! You now have access to unlimited albums and unlimited photos per album. Thank you for supporting the developer.", preferredStyle: .alert)
+                        let cancel = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in })
+                        alert.addAction(cancel)
+                        present(alert, animated: true, completion: nil)
+                        
+                    }
+                    
+                    break
+                    
+                case .failed:
+                    SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
+                    break
+                    
+                default: break
+                }}}
+    }
+    
 }
 
 // Put this piece of code anywhere you like

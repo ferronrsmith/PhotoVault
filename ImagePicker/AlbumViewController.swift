@@ -8,8 +8,9 @@
 
 import UIKit
 import Firebase
+import StoreKit
 
-class AlbumViewController : UIViewController, UINavigationControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class AlbumViewController : UIViewController, UINavigationControllerDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SKPaymentTransactionObserver, SKProductsRequestDelegate {
     
     @IBOutlet weak var collectionView: UICollectionView!
     var albumArray = [String]()
@@ -17,28 +18,108 @@ class AlbumViewController : UIViewController, UINavigationControllerDelegate, UI
     var loadedImage = UIImage();
     var albumCovers = [String]()
     
+    let PREMIUM_PRODUCT_ID   = "com.photolockr.premium"
+    let UNLIMITED_PRODUCT_ID = "com.photolockr.unlimited"
+    
+    var productID = ""
+    var productsRequest = SKProductsRequest()
+    var iapProducts = [SKProduct]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
         collectionView.delegate = self
         
+        // Fetch IAP Products available
+        fetchAvailableProducts()
+        
         let databaseTemp = Database.database();
         let databaseTempRef = databaseTemp.reference()
+        
+//        let customImageBarButton = UIBarButtonItem(image: UIImage(named: "icons8-menu-filled-50.png")?.withRenderingMode(.alwaysTemplate), style: .plain, target: self, action: #selector(goToSettings))
+//        navigationItem.leftBarButtonItem = customImageBarButton
         
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         if launchedBefore  {
             //do nothing
-        } else {
+            //nsuserdefaults already set before
+            
+            let plan = UserDefaults.standard.string(forKey: "plan")
+            Constants.currentPlan = plan!
+            print("BABU:  " + plan!)
+            
+            if plan == "free" {
+                UserDefaults.standard.set("free", forKey: "plan") //setObject
+                Constants.currentPlan = "free"
+                
+            }
+            else if plan == "premium"
+            {
+                UserDefaults.standard.set("premium", forKey: "plan") //setObject
+                Constants.currentPlan = "premium"
+            }
+            else if plan == "unlimited"
+            {
+                UserDefaults.standard.set("unlimited", forKey: "plan") //setObject
+                Constants.currentPlan = "unlimited"
+            }
+            else
+            {
+                let userID = Auth.auth().currentUser?.uid
+                var ref: DatabaseReference!
+                ref = Database.database().reference()
+                ref.child("users/" + userID! + "/plan").setValue("free")
+                
+                UserDefaults.standard.set("free", forKey: "plan") //setObject
+                Constants.currentPlan = "free"
+                
+            }
+            
+        }
+        else
+        {
             print("First launch, setting UserDefault.")
             UserDefaults.standard.set(true, forKey: "launchedBefore")
             
-            let linksRef = databaseTempRef.child("images_" + (Auth.auth().currentUser?.uid)! + "_links")
-            let albumNumbers = linksRef.child("Albums")
-            let linkRef = albumNumbers.child("Photos")
-            let coverPhoto = linksRef.child("CoverPhotos")
-            let coverPhotoChild = coverPhoto.child("Photos")
-            linkRef.setValue("Photos")
-            coverPhotoChild.setValue("default")
+            let userID = Auth.auth().currentUser?.uid
+            
+            var ref: DatabaseReference!
+            ref = Database.database().reference()
+            
+
+            ref.child("users").child(userID!).observeSingleEvent(of: .value, with: { (snapshot) in
+                // Get user value
+                let value = snapshot.value as? NSDictionary
+                let plan = value?["plan"] as? String ?? ""
+                
+                if plan == "free" {
+                    UserDefaults.standard.set("free", forKey: "plan") //setObject
+                    Constants.currentPlan = "free"
+
+                }
+                else if plan == "premium"
+                {
+                    UserDefaults.standard.set("premium", forKey: "plan") //setObject
+                    Constants.currentPlan = "premium"
+                }
+                else if plan == "unlimited"
+                {
+                    UserDefaults.standard.set("unlimited", forKey: "plan") //setObject
+                    Constants.currentPlan = "unlimited"
+                }
+                else
+                {
+                    ref.child("users/" + userID! + "/plan").setValue("free")
+                    UserDefaults.standard.set("free", forKey: "plan") //setObject
+                    Constants.currentPlan = "free"
+
+                }
+                
+                // ...
+            }) { (error) in
+                print(error.localizedDescription)
+            }
+            
         }
         
         //NEED TO ADD FOLDER VALUES FROM STORAGE TO ARRAY AND RELOAD DATA
@@ -246,7 +327,30 @@ class AlbumViewController : UIViewController, UINavigationControllerDelegate, UI
     }
     
     @IBAction func newAlbum(_ sender: Any) {
-        
+        if Constants.currentPlan == "free" {
+            if albumArray.count >= 1 {
+                // Need to upgrade plan for premium or unlimited data
+                IAPBothOptions()
+            }
+            else {
+                createAlbum()
+            }
+        }
+        else if Constants.currentPlan == "premium" {
+            if albumArray.count >= 3 {
+                // Need to upgrade plan for unlimited data
+                IAPUnlimitedOptionOnly()
+            }
+            else {
+                createAlbum()
+            }
+        }
+        else if Constants.currentPlan == "unlimited" {
+            createAlbum()
+        }
+    }
+    
+    func createAlbum() {
         //1. Create the alert controller.
         let alert = UIAlertController(title: "New Album", message: "Enter a name for this album.", preferredStyle: .alert)
         
@@ -282,7 +386,138 @@ class AlbumViewController : UIViewController, UINavigationControllerDelegate, UI
         
         // 4. Present the alert.
         self.present(alert, animated: true, completion: nil)
+    }
+
+    func IAPBothOptions() {
+        let alert = UIAlertController(title: "Upgrade Plan Required", message: "You've run out of available albums! To continue creating new albums, please choose a plan upgrade. Premium offers a total of 3 albums and 25 photos per album. Unlimited offers unlimited albums and photos.", preferredStyle: .actionSheet)
         
+        alert.addAction(UIAlertAction(title: "$0.99 Premium Plan", style: .default, handler: { (action) in
+            self.purchaseMyProduct(product: self.iapProducts[0])
+        }))
+        
+        alert.addAction(UIAlertAction(title: "$1.99 Unlimited Plan", style: .default, handler: { (action) in
+            self.purchaseMyProduct(product: self.iapProducts[1])
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Keep Using Free Plan", style: .destructive, handler: { (action) -> Void in }))
+        
+        self.present(alert, animated: true, completion: nil)
+        
+    }
+    
+    func IAPUnlimitedOptionOnly() {
+        let alert = UIAlertController(title: "Upgrade Plan Required", message: "You've run out of available albums! To continue creating new albums, please choose a plan upgrade or switch albums. Unlimited offers unlimited albums and photos.", preferredStyle: .actionSheet)
+        
+        alert.addAction(UIAlertAction(title: "$1.99 Unlimited Plan", style: .default, handler: { (action) in
+            self.purchaseMyProduct(product: self.iapProducts[1])
+        }))
+        
+        alert.addAction(UIAlertAction(title: "Keep Using Premium Plan", style: .destructive, handler: { (action) -> Void in }))
+        
+        self.present(alert, animated: true, completion: nil)
+        
+    }
+
+    // MARK: - FETCH AVAILABLE IAP PRODUCTS
+    func fetchAvailableProducts()  {
+        
+        // Put here your IAP Products ID's
+        var productIdentifiers = Set<String>()
+        productIdentifiers.insert(PREMIUM_PRODUCT_ID)
+        productIdentifiers.insert(UNLIMITED_PRODUCT_ID)
+        
+        productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers)
+        productsRequest.delegate = self
+        productsRequest.start()
+    }
+    
+    // MARK: - REQUEST IAP PRODUCTS
+    func productsRequest (_ request:SKProductsRequest, didReceive response:SKProductsResponse) {
+        if (response.products.count > 0) {
+            iapProducts = response.products
+            
+            print(iapProducts)
+            
+            for p in iapProducts {
+                print("Found product: \(p.productIdentifier) \(p.localizedTitle) \(p.price.floatValue)")
+            }
+            
+        }
+    }
+    
+    // MARK: - MAKE PURCHASE OF A PRODUCT
+    func canMakePurchases() -> Bool {  return SKPaymentQueue.canMakePayments()  }
+    func purchaseMyProduct(product: SKProduct) {
+        if self.canMakePurchases() {
+            let payment = SKPayment(product: product)
+            SKPaymentQueue.default().add(self)
+            SKPaymentQueue.default().add(payment)
+            
+            print("PRODUCT TO PURCHASE: \(product.productIdentifier)")
+            productID = product.productIdentifier
+            
+            
+            // IAP Purchases dsabled on the Device
+        } else {
+            
+            let alert = UIAlertController(title: "Purchases Disabled", message: "Purchases are disabled on your device. Please enable in-app purchases and retry.", preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "OK", style: .destructive, handler: { (action) -> Void in })
+            alert.addAction(cancel)
+            present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    // MARK:- IAP PAYMENT QUEUE
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        for transaction:AnyObject in transactions {
+            if let trans = transaction as? SKPaymentTransaction {
+                switch trans.transactionState {
+                    
+                case .purchased:
+                    SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
+                    
+                    // The Consumable product (10 coins) has been purchased -> gain 10 extra coins!
+                    if productID == PREMIUM_PRODUCT_ID {
+                        
+                        let userID = Auth.auth().currentUser?.uid
+                        var ref: DatabaseReference!
+                        ref = Database.database().reference()
+                        ref.child("users/" + userID! + "/plan").setValue("premium")
+                        
+                        UserDefaults.standard.set("premium", forKey: "plan") //setObject
+                        Constants.currentPlan = "premium"
+                        
+                        let alert = UIAlertController(title: "Purchase Successful", message: "You've successfully unlocked the Premium version! You now have access to 3 total albums and 25 photos per album. Thank you for supporting the developer.", preferredStyle: .alert)
+                        let cancel = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in })
+                        alert.addAction(cancel)
+                        present(alert, animated: true, completion: nil)
+                        
+                        // The Non-Consumable product (Premium) has been purchased!
+                    } else if productID == UNLIMITED_PRODUCT_ID {
+                        
+                        let userID = Auth.auth().currentUser?.uid
+                        var ref: DatabaseReference!
+                        ref = Database.database().reference()
+                        ref.child("users/" + userID! + "/plan").setValue("unlimited")
+                        
+                        UserDefaults.standard.set("unlimited", forKey: "plan") //setObject
+                        Constants.currentPlan = "unlimited"
+                        
+                        let alert = UIAlertController(title: "Purchase Successful", message: "You've successfully unlocked the Unlimited version! You now have access to unlimited albums and unlimited photos per album. Thank you for supporting the developer.", preferredStyle: .alert)
+                        let cancel = UIAlertAction(title: "OK", style: .default, handler: { (action) -> Void in })
+                        alert.addAction(cancel)
+                        present(alert, animated: true, completion: nil)
+                        
+                    }
+                    
+                    break
+                    
+                case .failed:
+                    SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
+                    break
+                    
+                default: break
+                }}}
     }
     
     override func didReceiveMemoryWarning() {
